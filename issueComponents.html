@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>מפתח מרכיבי הסוגיה</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&amp;family=Heebo:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --bg: #f5f2ec;
+            --surface: #ffffff;
+            --surface2: #f0ece3;
+            --surface3: #e8e3d8;
+            --border: rgba(0,0,0,0.09);
+            --border-strong: rgba(0,0,0,0.18);
+            --text: #1a1710;
+            --text-sub: #6b6558;
+            --text-hint: #9e9486;
+            --purple: #534AB7;
+            --purple-dark: #3C3489;
+            --purple-bg: #eeedfe;
+            --purple-light: #CECBF6;
+            --radius-lg: 16px;
+            --font-d: 'Frank Ruhl Libre', serif;
+            --font-b: 'Heebo', sans-serif;
+            --shadow: 0 10px 30px rgba(25, 23, 16, 0.06);
+            --ring-1: #534AB7;
+            --ring-2: #0F6E56;
+            --ring-3: #854F0B;
+            --bg-main: #f5f2ec;
+        }
+        body {
+            font-family: var(--font-b);
+            background: linear-gradient(180deg, #f7f4ee 0%, #f2eee6 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        .serif { font-family: var(--font-d); }
+        .page-shell { max-width: 1180px; margin: 0 auto; }
+        .topbar {
+            background: var(--surface);
+            border: 0.5px solid var(--border);
+            border-radius: 20px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            box-shadow: var(--shadow);
+            margin-bottom: 18px;
+        }
+        .topbar-title { font-family: var(--font-d); font-size: 34px; font-weight: 700; line-height: 1.2; color: var(--text); }
+        .topbar-sub { font-size: 14px; color: var(--text-sub); margin-top: 8px; line-height: 1.7; }
+        .hero-badge, .back-link {
+            background: var(--purple-bg);
+            color: var(--purple-dark);
+            border: 1px solid var(--purple-light);
+            border-radius: 999px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .panel {
+            background: var(--surface);
+            border: 0.5px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+        
+        .sugya-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .item-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid #e5e7eb;
+            position: relative;
+            background: white;
+        }
+        .item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .expansion-text {
+            text-align: justify;
+            text-align-last: right;
+        }
+
+        .source-quote {
+            margin: 0.75rem 1.75rem 1rem 0;
+            padding: 0.9rem 1.25rem;
+            border-right: 4px solid #d1d5db;
+            background: #f9fafb;
+            border-radius: 0.75rem;
+            color: #374151;
+        }
+
+    
+
+        .accordion-wrap {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .accordion-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            background: #ffffff;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .accordion-summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 1.1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            color: #1f2937;
+            background: #f8fafc;
+            transition: background-color 0.2s ease;
+        }
+
+        .accordion-summary:hover {
+            background: #eef2ff;
+        }
+
+        .accordion-summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .accordion-title {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .accordion-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: #4f46e5;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .accordion-icon::before {
+            content: '+';
+            font-size: 1.35rem;
+            line-height: 1;
+        }
+
+        details[open] .accordion-icon::before {
+            content: '−';
+        }
+
+        .accordion-content {
+            padding: 1.25rem 1.5rem 1.5rem;
+        }
+
+
+        .close-section-btn {
+            margin-top: 1.75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+            color: #1d4ed8;
+            padding: 0.65rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .close-section-btn:hover {
+            background: #dbeafe;
+            transform: translateY(-1px);
+        }
+
+        @media (min-width: 768px) {
+            .accordion-title { font-size: 1.875rem; }
+            .accordion-summary { padding: 1.25rem 1.5rem; }
+            .accordion-content { padding: 1.5rem 2rem 2rem; }
+        }
+
+        .item-card {
+            background: #faf8f4 !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 16px !important;
+            box-shadow: var(--shadow);
+        }
+        .item-card:hover, .item-card.selected-from-map {
+            border-color: var(--purple) !important;
+            background: var(--purple-bg) !important;
+            transform: translateY(-1px);
+        }
+        .item-card h3 { color: var(--purple-dark) !important; font-family: var(--font-d); }
+        .derashot-card-btn {
+            align-self: flex-start;
+            background: #2563eb;
+            color: #fff;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.2;
+            box-shadow: 0 8px 16px rgba(37,99,235,0.18);
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .derashot-card-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        #modal-content, #derashot-page {
+            background: var(--surface) !important;
+            border: 1px solid var(--border-strong) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.16) !important;
+        }
+        .accordion-item { border-color: var(--border) !important; box-shadow: var(--shadow); }
+        .accordion-summary { background: #faf8f4 !important; }
+        .accordion-summary:hover { background: var(--purple-bg) !important; }
+        .accordion-icon { background: var(--purple) !important; }
+        @media (max-width: 640px) {
+            .topbar { flex-direction: column; align-items: flex-start; }
+            .topbar-title { font-size: 26px; }
+            .back-link { white-space: normal; }
+        }
+
+</style>
+</head>
+<body class="p-4 md:p-8">
+<div class="page-shell">
+<header class="topbar" id="map-header">
+<div>
+<h1 class="topbar-title">מפת מרכיבי הסוגיה</h1>
+<div class="topbar-sub max-w-3xl space-y-2">
+<p>כלי עזר למיפוי ויזואלי של מהלך השקלא וטריא. לחץ על סעיף כדי לראות הגדרה, דוגמה ומילות פתיחה אופייניות.</p>
+<p>הקובץ כולל הרחבה באופן שבו חז"ל למדו את ההלכות מתוך התורה שבכתב. ההרחבה נמצאת באפשרות של "מקור בתורה וטעם".</p>
+</div>
+</header>
+<main class="space-y-6" id="map-page">
+<!-- Section 1: Tannaic -->
+<section id="section-1" class="panel">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-full flex items-center justify-center bg-indigo-100 text-indigo-600 font-bold">א</div>
+<h2 class="text-2xl font-bold text-indigo-900">מעגל ראשון: דיון סביב מקורות תנאיים</h2>
+</div>
+<div class="sugya-grid" id="grid-1"></div>
+</section>
+<!-- Section 2: Amoraic -->
+<section id="section-2" class="panel">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-100 text-emerald-600 font-bold">ב</div>
+<h2 class="text-2xl font-bold text-emerald-900">מעגל שני: דיונים עצמאיים של אמוראים</h2>
+</div>
+<div class="sugya-grid" id="grid-2"></div>
+</section>
+<!-- Section 3: Aggada & Miscellanea -->
+<section id="section-3" class="panel">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-full flex items-center justify-center bg-amber-100 text-amber-600 font-bold">ג</div>
+<h2 class="text-2xl font-bold text-amber-900">מעגל שלישי: אגדה ונושאים נוספים</h2>
+</div>
+<div class="sugya-grid" id="grid-3"></div>
+</section>
+<section class="panel">
+<h2 class="serif text-2xl text-gray-800 mb-3">הערה מסכמת</h2>
+<p class="text-lg text-gray-700 leading-relaxed">
+                סוגיה שלמה שעוסקת בנושא מסוים כוללת בתוכה כמה מרכיבים. יש מקומות שבהן הסוגיה משלבת בין הפרטים השונים. ראה לדוגמא בבא מציעא כה, ב לגבי גוזלות מקושרים שהגמרא מבררת את טעם המשנה ובעקבות קושיה היא מדייקת יותר את פרטי הדין ומציינת שהמשנה עוסקת רק במקרה מסוים.
+            </p>
+</section>
+</main>
+<section class="hidden max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-sm p-6 md:p-10 leading-relaxed expansion-text" id="derashot-page">
+<button class="mb-8 bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2 rounded-xl font-bold transition-colors" onclick="backToMap()">חזרה למפה</button>
+<h1 class="serif text-4xl md:text-5xl text-gray-800 mb-8">המקורות בתורה של ההלכות</h1>
+<div class="text-lg text-gray-700 mb-10 space-y-2">
+<p>בשורות הבאות ניגע בכמה שאלות יסוד שקשורות לאופן שבו חז"ל למדו את ההלכות מתוך הפסוקים. השאלות הן:</p>
+<p>א.	האם כל ההלכות של התורה שבעל פה ניתנו למשה בסיני או שהגיעו מתוך ניתוח של חז"ל</p>
+<p>ב.	האם חז"ל דרשו את הפסוקים ומתוך כך למדו את ההלכות או שההלכות היו ידועות והדרשות הן רק רמז?</p>
+<p>ג.	האם דרשות חז"ל הן הפשט של התורה או לא? אם לא, מדוע חז"ל סטו ממנו?</p>
+</div>
+<div class="accordion-wrap"><details class="accordion-item"><summary class="accordion-summary"><span class="accordion-title">תורה שבעל פה – מסורת או ניתוח</span><span aria-hidden="true" class="accordion-icon"></span></summary><div class="accordion-content text-lg text-gray-700 space-y-4"><p>קיימות שתי גישות בחז"ל ובראשונים באשר לשאלה האם כל ההלכות שמוגדרות "מדאורייתא" אכן ניתנו למשה בסיני, או שמא חכמים הם אלו שהוציאו אותה מהפסוקים בכוח עיונם.</p><p>לגבי הגישה הראשונה מופיע בגמרא בברכות (ה, א):</p><blockquote class="source-quote">ואמר רבי לוי בר חמא אמר רבי שמעון בן לקיש: מאי דכתיב ואתנה לך את לחת האבן והתורה והמצוה אשר כתבתי להורותם, לחות - אלו עשרת הדברות, תורה - זה מקרא, והמצוה - זו משנה, אשר כתבתי - אלו נביאים וכתובים, להורותם - זה תלמוד; מלמד שכולם נתנו למשה מסיני.</blockquote><p>מצד שני, במדרש רבה מופיעה קביעה מצומצמת יותר, ולפיה משה קיבל בסיני רק את הכללים (שמות רבה מא, ו):</p><blockquote class="source-quote">וכי כל התורה למד משה כתיב בתורה (איוב יא) ארוכה מארץ מדה ורחבה מני ים ולארבעים יום למדה משה אלא כללים למדהו הקדוש ברוך הוא למשה.</blockquote><p>בדורות הבאים מצאנו מחלוקת בראשונים בנושא. כך לדוגמא, <strong>רבנו חננאל</strong> תמך בשיטה הראשונה (פסחים לח, ב):</p><blockquote class="source-quote">שמא מינה שכל הדברים המפורשים במשנה הלכה למשה מסיני הן ואף על פי שהן שנויין סתמא.</blockquote><p>מצד שני, יש ראשונים אחרים שכתבו שלא ייתכן שמה קיבל את כל פרטי התורה מפני שאין להם סוף. כך לדוגמא כתב <strong>ר' יוסף אלבו</strong> (ספר העיקרים ג, כג):</p><blockquote class="source-quote">אי אפשר שתהיה תורת השם יתברך שלמה באופן שתספיק בכל הזמנים. לפי שהפרטים המתחדשים תמיד בעניני האנשים, במשפטים והדברים הנפעלים הם רבים מאד משיכללם ספר, על כן נתנו למשה בסיני על פה דרכים כוללים נרמזו בתורה בקצרה, כדי שעל ידם יוציאו החכמים שבכל דור ודור הפרטים המתחדשים.</blockquote><p>וכך כתב גם <strong>המאירי</strong> (פתיחה למסכת אבות):</p><blockquote class="source-quote">כל הצריך להם מבאורי המצות התלמוד הם הכל היה נמסר להם איש מאיש בשלימות ומה שהיה מתחדש והצטרכו בו להתבוננות לפי חידוש הענינים נמסרו להם העקרים והמדות שמהם היו מוציאים תעלומותיהם לאור ומבררים כל הדינים.</blockquote><p><strong>לרמב"ם</strong> קיימת גישה ייחודית בנושא. בהקדמה לפירוש המשנה הוא מחלק את עולם ההלכה לשלושה חלקים: </p><p>א.	דברים שלמדו אותם מהשמועה והם תורה שבעל פה. חלק זה כולל פירושים מוסכמים לדברי התורה (לדוגמא הקביעה שפרי עץ הדר הוא אתרוג) וכן הלכות למשה מסיני שאין להן מסורת (לדוגמא החובה שהתפילין יהיו שחורות).</p><p>ב.	דברים שבית הדין למד אותם על פי המידות שהתורה נדרשת בהן.</p><p>ג.	תקנות של חכמים לפי צורך השעה. </p><p>הרמב"ם מבחין בין החלק הראשון לשני, וקובע שבחלק הראשון לא אמורה להיות מחלוקת מפני שיש על כך מסורת מוצקה. עוד נראה שהרמב"ם קורא בכמה מקומות לדינים מהסוג השני "דברי סופרים" למרות שמדובר בפירוש דברי התורה (ראו את הדוגמא המפורסמת בהלכות אישות א, ב). אולם למעשה גם דינים אלו נחשבים לדאורייתא (ראו בנושאי הכלים שם).</p><div class="mt-8 rounded-2xl border border-gray-200 bg-gray-50 p-4 md:p-6">
+  <h3 class="text-xl font-bold text-gray-800 mb-4">תרשים סיכום קצר</h3>
+  <div class="overflow-x-auto"><svg width="900" height="420" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="תרשים מסכם: תורה שבעל פה - מסורת או ניתוח" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+  <style>
+    .box { stroke: white; stroke-width: 3; }
+    .line { stroke: #0b6d97; stroke-width: 4; fill: none; }
+    .label { fill: white; font-family: 'Assistant', sans-serif; font-size: 21px; font-weight: 400; text-anchor: middle; dominant-baseline: middle; direction: rtl; unicode-bidi: plaintext; }
+    .small { font-size: 19px; }
+  </style>
+  <line class="line" x1="450" y1="145" x2="450" y2="175"/>
+  <line class="line" x1="135" y1="175" x2="765" y2="175"/>
+  <line class="line" x1="135" y1="175" x2="135" y2="205"/>
+  <line class="line" x1="450" y1="175" x2="450" y2="205"/>
+  <line class="line" x1="765" y1="175" x2="765" y2="205"/>
+  <rect class="box" x="320" y="25" width="260" height="120" fill="#1f6d90"/>
+  <text class="label" x="450" y="72">
+    <tspan x="450" dy="0">תורה שבעל פה -</tspan>
+    <tspan x="450" dy="30">מסורת או ניתוח</tspan>
+  </text>
+  <rect class="box" x="20" y="205" width="260" height="125" fill="#95c94c"/>
+  <text class="label" x="150" y="250">
+    <tspan x="150" dy="0">מאירי, ספר העיקרים -</tspan>
+    <tspan x="150" dy="30">דינים רבים נלמדו על</tspan>
+    <tspan x="150" dy="30">ידי חכמים</tspan>
+  </text>
+  <rect class="box" x="320" y="205" width="260" height="125" fill="#f2bc00"/>
+  <text class="label small" x="450" y="238">
+    <tspan x="450" dy="0">רמב"ם - קיימים דינים</tspan>
+    <tspan x="450" dy="26">משני הסוגים, מה</tspan>
+    <tspan x="450" dy="26">שחכמים למדו נקרא</tspan>
+    <tspan x="450" dy="26">"דיני סופרים"</tspan>
+  </text>
+  <rect class="box" x="620" y="205" width="260" height="125" fill="#ef0b00"/>
+  <text class="label" x="750" y="250">
+    <tspan x="750" dy="0">רבנו חננאל - כל</tspan>
+    <tspan x="750" dy="30">הדינים ניתנו בסיני</tspan>
+  </text>
+</svg></div>
+</div>
+<div class="pt-3"><button type="button" class="close-section-btn" onclick="closeAccordionSection(this)">סגור מקטע זה ↑</button></div></div></details><details class="accordion-item"><summary class="accordion-summary"><span class="accordion-title">האם י"ג המידות ניתנו בסיני?</span><span aria-hidden="true" class="accordion-icon"></span></summary><div class="accordion-content text-lg text-gray-700 space-y-4"><p>המידות שהתורה נדרשת בהן מופיעות בתחילת מדרש תורת כהנים. <strong>הרמב"ם</strong> בהקדמה לפירוש המשנה קובע ששלוש עשרה המידות ניתנו למשה בסיני. </p><p>אמנם יש קשיים בשיטה זו מפני שרשימת המידות אינה מוסכמת על הכל. כך לדוגמא בגמרא בשבועות (כו, א) מופיעה מחלוקת ר' ישמעאל ור' עקיבא האם לדרוש את התורה בכלל ופרט או מיעוט וריבוי, ומכאן שאין הסכמה על שיטת הדרשה. ולא עוד, אלא שמסופר באותה ברייתא על הלל הזקן שהשתמש בשבע מהמידות. ברוח זו, כך גם העיר <strong>הרשב"ץ</strong> בפתיחת פירושו לברייתא של ר' ישמעאל, שרשימת המידות אינה מוסכמת. </p><p>ואכן, <strong>הנצי"ב</strong> (ויקרא כה, יח) קובע שהתורה ציוותה ליצור כללים לדרישת התורה, והם התהוו לאורך הדורות לפי עיונם של החכמים:</p><blockquote class="source-quote">והנה לעשות חידושי תורה על פי הכללים שנשנו כבר אין צריך עיון יתירה כל כך כמו לעשות איזה כלל בדרשת התורה על פי הקבלות בהלכות שמכבר, כמו שהוסיף תנא דבי רבי ישמעאל י"ג מדות, ומתחלה היה שבע מדות שהביא הלל הזקן, ואחר תנא דבי רבי ישמעאל נתוספו עוד כללים, והוא ע"פ עיון מחדש בכל דור ודור... משום הכי הזהיר כאן הכתוב ועשיתם את חקתי, לעשות כללים ע"פ עומק העיון</blockquote><div class="mt-8 rounded-2xl border border-gray-200 bg-gray-50 p-4 md:p-6">
+  <h3 class="text-xl font-bold text-gray-800 mb-4">תרשים סיכום קצר</h3>
+  <div class="overflow-x-auto"><svg width="900" height="420" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="תרשים מסכם: האם י&quot;ג מידות ניתנו בסיני" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+  <style>
+    .box { stroke: white; stroke-width: 3; }
+    .line { stroke: #0b6d97; stroke-width: 4; fill: none; }
+    .label { fill: white; font-family: 'Assistant', sans-serif; font-size: 21px; font-weight: 400; text-anchor: middle; dominant-baseline: middle; direction: rtl; unicode-bidi: plaintext; }
+  </style>
+  <line class="line" x1="450" y1="145" x2="450" y2="175"/>
+  <line class="line" x1="135" y1="175" x2="765" y2="175"/>
+  <line class="line" x1="135" y1="175" x2="135" y2="205"/>
+  <line class="line" x1="450" y1="175" x2="450" y2="205"/>
+  <line class="line" x1="765" y1="175" x2="765" y2="205"/>
+  <rect class="box" x="320" y="25" width="260" height="120" fill="#1f6d90"/>
+  <text class="label" x="450" y="72">
+    <tspan x="450" dy="0">האם י&quot;ג מידות</tspan>
+    <tspan x="450" dy="30">ניתנו בסיני</tspan>
+  </text>
+  <rect class="box" x="20" y="205" width="260" height="125" fill="#95c94c"/>
+  <text class="label" x="150" y="238">
+    <tspan x="150" dy="0">רשב&quot;ץ - רשימת</tspan>
+    <tspan x="150" dy="30">המידות לא</tspan>
+    <tspan x="150" dy="30">מוסכמות על כולם</tspan>
+  </text>
+  <rect class="box" x="320" y="205" width="260" height="125" fill="#f2bc00"/>
+  <text class="label" x="450" y="238">
+    <tspan x="450" dy="0">נצי&quot;ב - המידות</tspan>
+    <tspan x="450" dy="30">התהוו לאורך</tspan>
+    <tspan x="450" dy="30">הדורות</tspan>
+  </text>
+  <rect class="box" x="620" y="205" width="260" height="125" fill="#ef0b00"/>
+  <text class="label" x="750" y="238">
+    <tspan x="750" dy="0">הרמב&quot;ם - כל</tspan>
+    <tspan x="750" dy="30">המידות ניתנו</tspan>
+    <tspan x="750" dy="30">בסיני</tspan>
+  </text>
+</svg></div>
+</div>
+<div class="pt-3"><button type="button" class="close-section-btn" onclick="closeAccordionSection(this)">סגור מקטע זה ↑</button></div></div></details><details class="accordion-item"><summary class="accordion-summary"><span class="accordion-title">מדרש יוצר או מדרש מקיים</span><span aria-hidden="true" class="accordion-icon"></span></summary><div class="accordion-content text-lg text-gray-700 space-y-4"><p>בפרק הקודם ראינו שרוב רובם של הדינים שבתורה שבעל פה לא נמסרו במסורת מסיני אלא נוצרו על פי דעתם ושכלם של חז"ל. כאן המקום לשאול, האם הדין נוצר בזכות העובדה שחז"ל דקדקו בעומק הפסוק ומתוך כך הגיעו למסקנה הזו, או שהגיעו לדין באופן אחר והמדרש רק מקשר את ההלכה לפסוק מסוים. בדורות האחרונים קראו לאפשרות הראשונה מדרש יוצר, ולשניה מדרש מקיים.</p><p><strong>המלבי"ם</strong> קבע באופן חד משמעי שכל המדרשים של חז"ל הם יוצרים (הקדמת הפירוש לספר ויקרא):</p><blockquote class="source-quote">וכאשר שאלנו לדור ראשון ומזקנים נתבונן מה ענו על זאת, ראינו כי מלבם יוציאו מלים שהכתובים המובאים לראיה אל ההלכות הם רק ציונים ואסמכתות. אשר הציבו להם ציונים לעורר הזכרון, ועקרי ההלכות היו מקובלות בידם בעל פה. <br/><br/>וזה רחוק מאד, כי ראינו שהם שואלים תמיד מנא לך ומשיבים מקרא פלוני, ומקשים והא האי קרא מבעיא ליה לכדתניא, ומתרצים ומקשים ומפלפלים, שלא יצויר שיקשו כן על דבר שהוא רק רמז וסימן לבד. וכשיש מחלוקת כל אחד מביא ראיה לדעתו מן המקרא, ודוחה ראייתו של חברו, והגמ' מפלפל תמיד ביניהם בענין המקרא ומדקדק עד כחוט השערה, וסותר ובונה ומכריע ביניהם מן המקרא. עד שמבואר שעיקר ראיתם הוא מן הכתוב, ששם נוטעו ההלכות גם שורשו, ולא באו כשורש מארץ ציה.</blockquote><p>יש לציין שהמלבי"ם התעמת בדורות עם גישות ששללו את הסמכות של התורה שבעל פה, ולכן הוא עשה מאמץ גדול לעגן אותה שבתורה שבכתב. </p><p>בכיוון הפוך הלך <strong>הרלב"ג</strong> על התורה בהקדמתו, וקבע שפירושי חז"ל הם מסורת ממשה רבנו, ולכן הלימודים של חז"ל הם רמזים שהגיעו בשלב מאוחר יותר. כיוון שרמזים אלו אינם המקור לדין, הרשה הרלב"ג לעצמו להציע מקורות אחרים לדיני חז"ל:</p><blockquote class="source-quote">והנה בבאורנו המצוות והשורשים אשר מהם יצאו כל דיניהם אשר התבארו בחכמה התלמודית, לא יהיה מנהגנו בכל המקומות לסמוך אותם השורשים אל המקומות אשר סמכו אותם חכמי התלמוד באחת משלוש עשרה מידות לפי מנהגם. <br/><br/>וזה שהם סמכו אלו הדברים האמיתיים המקובלים להם במצוות התורה לפסוקים ההם, להיותם כדמות רמז ואסמכתא לדברים ההם. לא שיהיה דעתם שיהיה מוצא אלו הדינים מאלו המקומות... <br/><br/>אבל נסמוך אותם על פשטי הפסוקים אשר אפשר שיצאו הדינים האלו מהם, כי בזה תתיישב הנפש יותר. ואין בזה יציאה מדרכי רבותינו ז"ל, כי הם לא כיוונו כמו שאמרנו שיהיה על כל פנים מוצא הדינים ההם מהמקומות אשר סמכו אותם להם, אבל הם אצלם מקובלים איש מפי איש עד משה רבנו עליו השלום, וביקשו להם רמז בכתוב.</blockquote><p>כל גישה הביאה ראיות שונות לשיטתה. כך לדוגמא בתוספתא (סנהדרין ט, א) מסופר שכאשר הסנהדרין ניגשה להכריע בדינו של חוטא מסוים לפני קביעת גזר דינו, הם דקדקו בפסוקים היטב כדי להחליט האם התורה מחייבת במקרה כזה או לא. מכאן שהמדרש הוא אכן יוצר.</p><p>מצד שני, במשנה בכריתות (ג, ז-ט) מובאת שאלה ששאל <strong>ר' עקיבא</strong> את החכמים, והם הודו שלא שמעו מסורת על שאלה זו, ולא ניסו לעיין בפסוקים כדי להכריע. </p><p>ואכן, נראה שיש הבדל בין סוגי המדרשים, יש כאלו שנראה שנצמדים ללשון הפסוק ואכן דורשים אותו, ויש כאלו שיותר נראים כמו רמז. </p><p>כאן המקום להזכיר שהיתה מחלוקת כללית בין <strong>ר' ישמעאל</strong> לבין ר' עקיבא בשאלה האם לדרוש את התורה לפי ההיגיון ולהיצמד לפשט שלה, או שניתן לדרוש בשלל צורות, גם אם חלקן ייחודיות. </p><p>ר' ישמעאל קבע ש"דיברה תורה כלשון בני אדם" (ספרי במדבר קיב). לעומתו, ר' עקיבא נהג לדרוש מכל קוץ וקוץ של התורה תילי תילין של הלכות (מנחות כט, ב), למרות שלא היה להן סימוכין ברורים בתורה. לעיתים אף חבריו התרעמו על שיטת דרשה זו (סנהדרין נא, ב). </p><p><strong>המהר"ל</strong> מפראג מסביר שלפי גישת המדרש המקיים מקור דיני התורה הוא מתוך שכל החכמים, אבל העובדה שהכל רמוז בה הופך אותה לתמימה ומכילה את הכל (באר הגולה, באר ג פרק ד):</p><blockquote class="source-quote">ועוד יש לך לדעת ולהבין, כי כל מה שדרשו חכמים מן הכתוב, לא היה עיקר שלמדו זה מן הכתוב, רק כי בלא זה הדבר הוא כך לפי דעת ושכל חכמים, והדבר הוא אמת בעצמו. וכאשר הדבר הוא אמת בעצמו, רק שאי אפשר שלא יהיה נרמז הדבר הזה בכתוב, כי התורה היא תמימה ויש בה הכל, ולפיכך אי אפשר שלא יהיה הדבר נרמז במדרש, אף שהוא רחוק מאוד, סוף סוף נמצא בתורה הכל, כמו שראוי לתורה.</blockquote><p>ברוח זו ראו בפתיחת הנצי"ב לפירושו העמק דבר על הגדרת התורה כשירה, וכיצד הדבר משפיע על אופן כתיבתה.</p><div class="mt-8 rounded-2xl border border-gray-200 bg-gray-50 p-4 md:p-6">
+  <h3 class="text-xl font-bold text-gray-800 mb-4">תרשים סיכום קצר</h3>
+  <div class="overflow-x-auto"><svg width="900" height="560" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="תרשים מסכם: האם המדרשים יצרו את ההלכות או שהיו ידועות כבר" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+  <style>
+    .box { stroke: white; stroke-width: 3; }
+    .line { stroke: #0b6d97; stroke-width: 4; fill: none; }
+    .label { fill: white; font-family: 'Assistant', sans-serif; font-size: 21px; font-weight: 400; text-anchor: middle; dominant-baseline: middle; direction: rtl; unicode-bidi: plaintext; }
+  </style>
+  <line class="line" x1="450" y1="160" x2="450" y2="190"/>
+  <line class="line" x1="270" y1="190" x2="630" y2="190"/>
+  <line class="line" x1="270" y1="190" x2="270" y2="220"/>
+  <line class="line" x1="630" y1="190" x2="630" y2="220"/>
+  <line class="line" x1="270" y1="345" x2="270" y2="385"/>
+  <line class="line" x1="630" y1="345" x2="630" y2="385"/>
+  <rect class="box" x="335" y="20" width="230" height="140" fill="#1f6d90"/>
+  <text class="label" x="450" y="68">
+    <tspan x="450" dy="0">האם המדרשים יצרו</tspan>
+    <tspan x="450" dy="32">את ההלכות או שהיו</tspan>
+    <tspan x="450" dy="32">ידועות כבר?</tspan>
+  </text>
+  <rect class="box" x="130" y="220" width="280" height="125" fill="#95c94c"/>
+  <text class="label" x="270" y="252">
+    <tspan x="270" dy="0">רלב"ג - ההלכות נלמדו</tspan>
+    <tspan x="270" dy="30">באופן עצמאי,</tspan>
+    <tspan x="270" dy="30">המדרשים נועדו לזכרון</tspan>
+  </text>
+  <rect class="box" x="490" y="220" width="280" height="125" fill="#ef0b00"/>
+  <text class="label" x="630" y="267">
+    <tspan x="630" dy="0">מלבי"ם - המדרשים</tspan>
+    <tspan x="630" dy="30">יצרו את ההלכות</tspan>
+  </text>
+  <rect class="box" x="130" y="385" width="280" height="130" fill="#95c94c"/>
+  <text class="label" x="270" y="425">
+    <tspan x="270" dy="0">מתאים לשיטת ר'</tspan>
+    <tspan x="270" dy="30">עקיבא שדרש את</tspan>
+    <tspan x="270" dy="30">התורה בצורה רחבה</tspan>
+  </text>
+  <rect class="box" x="490" y="385" width="280" height="130" fill="#ef0b00"/>
+  <text class="label" x="630" y="412">
+    <tspan x="630" dy="0">מתאים לשיטת ר'</tspan>
+    <tspan x="630" dy="28">ישמעאל שדרש את</tspan>
+    <tspan x="630" dy="28">התורה בצורה</tspan>
+    <tspan x="630" dy="28">מצמצמת</tspan>
+  </text>
+</svg></div>
+</div>
+<div class="pt-3"><button type="button" class="close-section-btn" onclick="closeAccordionSection(this)">סגור מקטע זה ↑</button></div></div></details><details class="accordion-item"><summary class="accordion-summary"><span class="accordion-title">האם מדרש חז"ל תואם לפשוטו של מקרא?</span><span aria-hidden="true" class="accordion-icon"></span></summary><div class="accordion-content text-lg text-gray-700 space-y-4"><p>במקרים רבים נראים שההלכה שחז"ל דרשו סותרת את מה שעולה מהפסוק לפי פשוטו. לאור זאת, הפרשנים נחלקו בשאלה האם דברי חז"ל אכן מייצגים את הפשט בכל מקום. <strong>המלבי"ם</strong> קבע באופן חד משמעי שאין אפשרות שמדרשי ההלכה יסתרו את הפשט. כך כתב (הקדמת הפירוש לחומש ויקרא):</p><blockquote class="source-quote">בפי' הזה סללתי דרך חדש, נאדר בקודש, לבאר דברי חכמים וחדותם, דברי רבותינו בקבלתם, על פי יסודי הלשון ועל פי חוקי המליצה וההגיון, בדרכים חדשים מופלאים ומסולאים. בו הראיתי ובררתי כי היה ביד חז"ל אוצרות וחוסן ישועות מלאים חכמה ודעת, היה בידם כללים גדולים ויסודות קבועים בדרכי הדקדוק ויסודי הלשון וההגיון אשר רובם נעלמו ונסתרו מעין כל חכמי לבב הבאים אחריהם, וע"כ נעלמו דרכיהם ונתיבותיה לא נודעו. <br/><br/>הראיתי ובררתי במופתים נאמנים כי הדרוש הוא הפשט הפשוט המוכרח והמוטבע בעומק הלשון וביסודי השפה העבריה. וכל התורה המסורה בע"פ הלא כתובה על ספר תורת אלקים מפורש ושום שכל ויבינו במקרא את כל דברי הקבלה שנמסרה בסיני על פי כללי הלשון ודרכיו וגדריו על פי חוקים קבועים וברורים ואמתיים.</blockquote><p>כנגדו, <strong>הרשב"ם</strong> קבע שהכתוב יכול לסבול יותר ממשמעות אחת (שמות כא, א), אם כי הדגיש שהוא מחוייב לפסקי ההלכה של חז"ל:</p><blockquote class="source-quote">ידעו ויבינו יודעי שכל כי לא באתי לפרש הלכות אף על פי שהם עיקר, כמו שפירשתי בבראשית כי מיתור המקראות נשמעין ההגדות וההלכות, ומקצתן ימצאו בפירושי רבינו שלמה אבי אמי זצ"ל, ואני לפרש פשוטן של מקראות באתי. ואפרש הדינין וההלכות לפי דרך ארץ. ואף על פי כן ההלכות עיקר כמו שאמרו רבותינו הלכה עוקרת משנה.</blockquote><p>ראו למשל דוגמאות שונות בפירושו לשמות יג, ט בנושא התפילין וכן פירושו לקביעה שהיום הולך אחר הלילה בבראשית א, ה. וראו בדברי <strong>הגר"א</strong> (אדרת אליהו שמות כא, ו) שנראה שתומך בגישת <strong>הרשב"ם</strong> שאכן יש לפשט מקום עצמאי. </p><p>אמנם יש להבחין בין שני סוגים של מקרים. הראשון הוא שחז"ל חרגו מהפשט באופן מודע ומכוון, והשני הוא מסקנות שנובעות מניתוח עמוק של הכתובים עצמם. </p><p>הסוג הראשון כולל לדוגמא את הקביעה ש"עין תחת עין" היא ממון (בבא קמא פג, ב). כאן המקום לציין לדברי <strong>הרב קוק</strong> (אגרות הראי"ה א, אגרת צ) שכתב שייתכנו אפשרויות שונות לדרוש את התורה והן יכולות להשתנות בדורות אחרים:</p><blockquote class="source-quote">מה שאנכי אומר, שהידיעה העליונה, הסוקרת כל המעשים מראש ועד סוף, היא סובבת את כל התו"כ, היא אמתת קבלת עול מלכות שמים, שהוכנו מראש כל הסיבות שיסבבו ההבנות וההרגשות לבא לידי החלטות בכל דור ודור כראוי וכנכון. ע"כ אי-אפשר לאמתתה של תורה להתגלות כ"א בהיות עם ד' כולו בארצו, מבונה בכל תיקוניו הרוחניים והחומריים גם יחד, שאז תשוב תורה שבע"פ לאיתנה, לפי הכרת ב"ד הגדול, היושב במקום אשר יבחר ד', על כל דבר אשר יפלא למשפט, ואז אנו בטוחים שכל תולדה חדשה תהיה מוכתרת בכל עז ובכל קודש, כי קודש ישראל לד'.<br/><br/>ואם תפול שאלה על איזה משפט שבתורה, שלפי מושגי המוסר יהיה נראה שצריך להיות מובן באופן אחר, אז אם באמת ע"פ ב"ד הגדול יוחלט שזה המשפט לא נאמר כי אם באותם התנאים שכבר אינם, ודאי ימצא ע"ז מקור בתורה, והסכמת המאורעאות עם כח ב"ד ודרישת המקרא יחד אינם דברים שמזדמנים במקרה, כ"א הם אותיות מחכימות מאורה של תורה ואמתת תורה שבע"פ, שאנו חייבים לשמע לשופט אשר יהיה בימים ההם, ואין כאן "התפתחות" של גריעותא. אבל מי שבא לדון בזמן הזה, שאנחנו מדולדלים וחיינו הכלכליים אינם נערכים לשם חיים לגבי מצב האומה בצביונה הראוי, ע"פ אותן הדרישות הרוממות, הוא נכון למועדי רגל, ורחמנא ליצלן מהאי דעתא.</blockquote><p>לאור זאת נובעת שיטתו הייחודית בנושא הצמחונות, שבה קבע שייתכן שבשלב מסוים הסנהדרין תדרוש שקרבנות מהחי כבר לא רצויים בעיני ה'. רמז לאפשרות לדרוש את התורה באופנים שונים קיים כבר בתלמוד <strong>הירושלמי</strong> (סנהדרין ד, ב):</p><blockquote class="source-quote">א"ר ינאי אילו ניתנה התורה חתוכה לא היתה לרגל עמידה. מה טעם? 'וידבר ה' אל משה', אמר לפניו רבונו של עולם הודיעני היאך היא ההלכה אמר לו אחרי רבים להטות רבו המזכין זכו רבו המחייבין חייבו כדי שתהא התורה נדרשת מ"ט פנים טמא ומ"ט פנים טהור.</blockquote><p>ברוח זו, גם ב<strong>דגל מחנה אפרים</strong> (בראשית "או יאמר ספר") הזכיר את העיקרון שהתורה תתחדש בכל דור:</p><blockquote class="source-quote">תורה שבעל פה ותורה שבכתב בלא תורה שבעל פה אינו תורה שלימה והוא רק כמו חצי ספר עד שבאו חז"ל ודרשו התורה וגילו דברים הסתומים ופעמים הם עוקרין דבר מן התורה והיינו בענין מלקות שכתוב בתורה ארבעים ובאו רבנן ובצרו חדא (מכות כ"ב ב) והכל על ידי הופעת רוח קדשם שהופיע עליהם והיה כח בידם לעשות זה... <br/><br/>ובדרושי מאמרי חז"ל נשלם התורה להיות נקרא ספר שלם וכן בכל דור ודורשיו הם משלימין התורה כי התורה נדרשת בכל דור ודור לפי מה שצריך לאותו דור ולפי שורש נשמתן של אותו הדור כך ה' יתברך מאיר עיני חכמי הדור ההוא בתורתו הקדושה.</blockquote><p>וכן כתבו ב<strong>צדקת הצדיק</strong> (אות צ) ובהקדמת <strong>הדור רביעי</strong> למסכת חולין. </p><div class="mt-8 rounded-2xl border border-gray-200 bg-gray-50 p-4 md:p-6">
+  <h3 class="text-xl font-bold text-gray-800 mb-4">תרשים סיכום קצר</h3>
+  <div class="overflow-x-auto"><svg width="900" height="560" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="תרשים מסכם: האם מדרשי חז&quot;ל תואמים לפשט הפסוקים" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+  <style>
+    .box { stroke: white; stroke-width: 3; }
+    .line { stroke: #0b6d97; stroke-width: 4; fill: none; }
+    .label { fill: white; font-family: 'Assistant', sans-serif; font-size: 21px; font-weight: 400; text-anchor: middle; dominant-baseline: middle; direction: rtl; unicode-bidi: plaintext; }
+  </style>
+  <line class="line" x1="520" y1="160" x2="520" y2="190"/>
+  <line class="line" x1="300" y1="190" x2="750" y2="190"/>
+  <line class="line" x1="300" y1="190" x2="300" y2="220"/>
+  <line class="line" x1="750" y1="190" x2="750" y2="220"/>
+  <line class="line" x1="300" y1="350" x2="300" y2="380"/>
+  <line class="line" x1="100" y1="380" x2="520" y2="380"/>
+  <line class="line" x1="100" y1="380" x2="100" y2="410"/>
+  <line class="line" x1="520" y1="380" x2="520" y2="410"/>
+  <rect class="box" x="390" y="20" width="260" height="140" fill="#1f6d90"/>
+  <text class="label" x="520" y="58">
+    <tspan x="520" dy="0">האם מדרשי חז&quot;ל</tspan>
+    <tspan x="520" dy="32">תואמים לפשט</tspan>
+    <tspan x="520" dy="32">הפסוקים</tspan>
+  </text>
+  <rect class="box" x="220" y="220" width="270" height="130" fill="#95c94c"/>
+  <text class="label" x="355" y="265">
+    <tspan x="355" dy="0">רשב&quot;ם - קיים רובד</tspan>
+    <tspan x="355" dy="30">של פשט עצמאי</tspan>
+  </text>
+  <rect class="box" x="540" y="220" width="270" height="130" fill="#ef0b00"/>
+  <text class="label" x="675" y="265">
+    <tspan x="675" dy="0">מלבי&quot;ם - מדרשי</tspan>
+    <tspan x="675" dy="30">חז&quot;ל הם הפשט</tspan>
+  </text>
+  <rect class="box" x="20" y="410" width="270" height="130" fill="#1f6d90"/>
+  <text class="label" x="155" y="448">
+    <tspan x="155" dy="0">חז&quot;ל דקדקו בסתירות</tspan>
+    <tspan x="155" dy="30">בכתוב והכריעו בצורה</tspan>
+    <tspan x="155" dy="30">משולבת</tspan>
+  </text>
+  <rect class="box" x="350" y="410" width="300" height="130" fill="#1f6d90"/>
+  <text class="label" x="500" y="448">
+    <tspan x="500" dy="0">חז&quot;ל שינו ממנו בגלל</tspan>
+    <tspan x="500" dy="30">שיקולים שהנחו אותם</tspan>
+  </text>
+</svg></div>
+</div>
+<div class="pt-3"><button type="button" class="close-section-btn" onclick="closeAccordionSection(this)">סגור מקטע זה ↑</button></div></div></details></div>
+
+</section>
+<!-- Modal Background -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] hidden items-center justify-center p-4" id="modal-bg">
+<div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 relative transform scale-95 transition-transform duration-200" id="modal-content">
+<button class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 text-3xl leading-none" onclick="closeModal()">×</button>
+<div class="mt-4" id="modal-body"></div>
+</div>
+</div>
+<script>
+        const data = {
+            tannaic: [
+                { id: 'a1', t: 'סדר הדינים במקור', d: 'כאשר מוזכרים במשנה כמה דינים, הגמרא מבררת מדוע הם הוזכרו בסדר הזה ולא בסדר אחר.', ex: 'המשנה בתחילת מסכת יבמות מונה את חמשת עשרה הנשים שאסורות בייבום ומתחילה בבתו. הגמרא (יבמות ב, ב) מיד שואלת אם מקור האיסור באחות אשתו, מדוע היא לא נכתבה ראשונה.', k: 'ליתני... ברישא' },
+                { id: 'a2', t: 'לשון המקור', d: 'המשנה התנסחה בצורה מדויקת. כאשר יש חריגות מסוימות בלשון, הגמרא מיד שואלת מדוע זה כך.', ex: 'המשנה בתחילת פרק המניח (בבא קמא כז, א) דנה במקרה של אדם שהניח מכשול ברשות הרבים, ומציינת בתחילה שהוא הניח כד ולאחר מכן קוראת לאותו חפץ חבית. הגמרא מיד שואלת מדוע המשנה מחליפה בין כד לחבית, ומסבירה שיש לכך משמעות הלכתית.', k: 'מאי שנא הכא ומאי שנא התם, פתח ב... וסיים ב..., מאי אירייא דתני' },
+                { id: 'a3', t: 'ציון דינים שלא הוזכרו', d: 'המשנה נכתבה בדקדוק רב, ור\' יהודה הנשיא הכניס בכל פעם רק את הדינים שהוא מצא לנכון. לעיתים הגמרא שואלת מדוע יש דינים מסוימים שהיו ראויים להיכנס ולא נכנסו.', ex: 'המשנה בתחילת מסכת קידושין מציינת שלוש דרכים שבהן אשה מתקדשת: כסף, שטר וביאה. הגמרא (קידושין ג, א) שואלת מה המניין (שלוש דרכים) בא למעט, ומשיבה שהוא בא להדגיש שרק בשלושת הדרכים האלו האשה מתקדשת, ולא בקניין חופה למשל.', k: 'מניינא למעוטי מאי' },
+                { id: 'a4', t: 'ביאור הדין', d: 'המשנה נכתבה בקיצור, והגמרא מנסה להבין כל דין לעומק. כמו כן, לעיתים יש מחלוקת אמוראים וההבדל ביניהם לא מספיק ברור. הגמרא מנסה להבין מה ההבדל בכל זאת.', ex: 'המשנה קובעת (קידושין כט, א) ש"כל מצוות הבן על האב אנשים חייבים ונשים פטורות", והגמרא שם מביאה ברייתא ארוכה שמפרשת את הדין הזה. או למשל נאמר בברייתא בהקשר של הלכות בורר בשבת: "היו לפניו מיני אוכלין - בורר ואוכל, בורר ומניח. ולא יברור, ואם בירר - חייב חטאת" (שבת עד, א). הגמרא שואלת "מאי קאמר" כי לשון הברייתא מעט סתומה, ומביאה כמה פירושים להגדרה המדויקת של איסור בורר בשבת.', k: 'מאי קאמר, מאי..., במאי עסקינן, הא גופא קשיא, מאי שנא רישא ומאי שנא סיפא; וכשיש ברייתא שמבארת את המשנה: תניא, תנו רבנן או תנא' },
+                { id: 'a5', t: 'צריכותא', d: 'לעיתים נראה שחלק מהדינים במשנה חוזרים על עצמם, והגמרא שואלת מדוע יש צורך בכולם ולא ניתן היה לקצר עוד יותר את לשון המשנה. בדרך כלל היא מסבירה שכל משפט אכן מחדש משהו שהמשפט השני לא לימד ולכן צריך את שניהם.', ex: 'הגמרא (בבא קמא טו, א) מביאה רשימה של אנשים שכשרים להעיד על נזקים שנעשו לאחרים: בני חורין למעט עבדים, ובני ברית למעט גויים. והיות ונראה שהעיקרון של שניהם דומה, היא מסבירה מדוע יש צורך לכתוב את שניהם.', k: 'וצריכא, וצריכי' },
+                { id: 'a6', t: 'מקור בתורה וטעם', d: 'המשנה כתובה בקצרה מאוד. כדי לבסס את הדין ולברר את התוקף שלו, הגמרא מבררת מהו מקור הדין בתורה (או מדברי חכמים אם הוא כזה). בנוסף הגמרא מבררת מהו טעמו.', ex: 'המשנה בתחילת מסכת קידושין קבעה שאשה נקנית בכסף. הגמרא שם (קידושין ג, ב) שואלת מניין שאשה נקנית בכסף, שטר וביאה.', k: 'מנלן, מנא הני מילי, מאי טעמא, משום מה' },
+                { id: 'a7', t: 'מי התנא', d: 'פעמים רבות המשניות כתובות ללא שם. הגמרא מנסה לזהות מיהו הדובר של המשנה כדי לברר האם דבריו תואמים למה שנאמר במקום אחר.', ex: 'המשנה (בבא קמא סא, א) קובעת שאדם שהדליק אש והיא עברה דרך ברוחב של דרך הרבים – פטור. הגמרא שואלת מי התנא שסובר שרוחב כזה של דרך פוטר מתשלום ומשיבה שזה ר\' אליעזר.', k: 'מאן תנא, הא מני, מתניתין דלא כהאי תנא' },
+                { id: 'a8', t: 'השוואה בין דינים זהים', d: 'לעיתים התנאים השוו בין מצוות קרובות או דומות זו לזו, כדי לברר את היחס ביניהן ומי קודמת למי. הגמרא מפתחת את הדיון יותר.', ex: 'הברייתא (קידושין כט, ב) שואלת מה יש לעשות כאשר אדם צריך ללמוד תורה ולישא אשה, מה קודם למה. מקרה דומה הוא שיש כסף רק ללומד אחד, וכעת הוא ובנו צריכים ללמוד.', k: '' },
+                { id: 'a9', t: 'הוספת דינים שלא הוזכרו במקור', d: 'המשנה כתובה בצורה מדויקת, ונכנסו אליה רק דינים מסוימים. לעיתים הגמרא שואלת מדוע דין מסוים שהיה צריך להיכנס לא נכנס, ואז כאשר היא משיבה ניתן להבין מה מייחד את הדינים שנכתבו בה (הסוג הזה מזכיר את הסוג ציון דינים שלא הוזכרו).', ex: 'המשנה במסכת בבא מציעא (נה, א) מציינת חמישה סוגים של דינים שיש בהם משמעות לפרוטה. הגמרא שם שואלת מדוע אונאה אינה אחד מהדינים האלו, ובעקבות כך מביאה מחלוקת האם יש משמעות לאונאה בפרוטה.', k: 'וליתני נמי, תנא אף ..., ויהא ... נמי,' },
+                { id: 'a10', t: 'מתי הדין נאמר', d: 'המשנה כתובה בצורה סתומה, ולא תמיד ברור באיזה מקרים או מצבים היא דיברה. הגמרא מגדירה או מגבילה יותר את הדינים השונים כדי להבהיר אותם יותר. לעיתים הבירור הזה נעשה מתוך הצגת סתירה למקור אחר, ואז התירוץ מגדיר היכן כל דין נאמר.', ex: 'המשנה (ברכות לב, ב) קובעת שאדם שמתפלל לא יפסיק אפילו אם המלך שואל בשלומו. הגמרא מציינת שזה נכון רק כאשר מלך ישראל שואל בשלומו, אבל אם מלך גוי שואל בשלומו עליו להפסיק בגלל הסכנה.', k: 'ולא אמרן, והני מילי, לא שנו, והוא ש..., ורמינהו... לא קשיא' },
+                { id: 'a11', t: 'הלכה', d: 'לרוב לא ניתן להכריע מהי ההלכה בעקבות לימוד המשנה. הגמרא פוסקת את ההלכה למעשה במחלוקות שונות.', ex: 'יש מחלוקת בברייתא (ראש השנה יט, ב) האם מגילת תענית נוהגת בזמן שבית המקדש לא קיים, והגמרא מכריעה שהיא לא נוהגת.', k: 'והלכתא' },
+                { id: 'a12', t: 'מעשה', d: 'לאחר קביעת ההלכה בנושא מסוים, הגמרא מביאה מעשים של חכמים שמהם ניתן ללמוד כיצד לנהוג בדינים מסוימים.', ex: 'לאחר סיום הדיון כיצד יש לשלם על נזק של בהמה בשדה (בבא קמא נח, ב), הגמרא מביאה מעשה על אליעזר זעירא שנתפס על ידי אנשי ריש גלותא והם שאלו אותו שאלה על המשנה הזו.', k: 'ההוא גברא' }
+            ],
+            amoraic: [
+                { id: 'b1', t: 'מימרא עצמאית', d: 'לעיתים הגמרא מביאה מימרא עצמאית של אמורא שאינה קשורה ישירות למשנה אבל קשורה לנושא הכללי שעוסקים בו בפרק. סביבו מתפתח דיון שלם והגמרא מנסה להביא ראיות או לדחות את דבריו.', ex: 'לאחר דיון בהגדרת ייאוש מאבדה, הגמרא (בבא מציעא כג, א) מביאה את דבריו של רב זביד בשם רבא, שקבע שאם אדם אומר "ויי לחסרון כיס" זו נחשבת אבדה.', k: 'אמר רב..., אמר רבי...' },
+                { id: 'b2', t: 'מחלוקת אמוראים', d: 'לעיתים אמוראים נחלקים בנושא מסוים שלא בהכרח צמוד לנושא המשנה אלא קשור לנושא הכללי של הפרק. לרוב סוגיות כאלו בנויות מהגדרת המחלוקת ואז הבאת ראיות לכאן ולכאן כדי להכריע בין הצדדים. לעיתים יש נסיון לדמות את מחלוקת האמוראים למחלוקת תנאים.', ex: 'בתחילת פרק אלו מציאות (בבא מציעא כא, א) הגמרא מביאה מחלוקת אביי ורבא האם ייאוש שלא מדעת נחשב ייאוש או לא.', k: 'איתמר' },
+                { id: 'b3', t: 'איבעיא', d: 'לעיתים הגמרא מביאה ספק בשאלה הלכתית מסוימת, שיש הגיון להכריע כמו שני הצדדים שיש בתוכו. הגמרא מביאה ראיות לכאן ולכאן ומנסה להכריע את הספק, ולעיתים מציעה לתלות את השאלה במחלוקת תנאים.', ex: 'הגמרא במסכת זבחים (צ, ב) מתלבטת בשאלה כיצד יש לנהוג אם עומדים לפנינו שני קרבנות, אחד תדיר יותר (כמו תמיד) והשני מקודש יותר (כמו מוסף), את מי יש להקדים.', k: 'איבעיא להו, בעי רב...' }
+            ],
+            aggada: [
+                { id: 'c1', t: 'אגדה', d: 'לאחר סיום הדיון ההלכתי בנושא מסוים, הגמרא מביאה ענייני אגדה שקשורים לאותו נושא.', ex: 'לאחר סיום הדיון על מצוות האב ללמד את בנו תורה, הגמרא מבררת את מעלתה של התורה ומאריכה בדברי אגדה באותו עניין (קידושין כט, ב).', k: '' }
+            ]
+        };
+
+        function renderAll() {
+            renderGrid(data.tannaic, 'grid-1', 'indigo');
+            renderGrid(data.amoraic, 'grid-2', 'emerald');
+            renderGrid(data.aggada, 'grid-3', 'amber');
+        }
+
+        function renderGrid(items, containerId, theme) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.id = `card-${item.id}`;
+                card.className = `item-card p-4 rounded-xl border-${theme}-200 bg-${theme}-50 flex flex-col justify-between h-32`;
+                card.innerHTML = `
+                    <h3 class="font-bold text-lg leading-tight text-${theme}-700">${item.t}</h3>
+                    ${item.id === 'a6' ? `<button type="button" class="derashot-card-btn">כיצד חז"ל דרשו את התורה</button>` : ''}
+                `;
+                card.onclick = () => openModal(item);
+                const derashotButton = card.querySelector('.derashot-card-btn');
+                if (derashotButton) {
+                    derashotButton.onclick = (event) => {
+                        event.stopPropagation();
+                        openDerashotPage();
+                    };
+                }
+                container.appendChild(card);
+            });
+        }
+
+        function openModal(item) {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div class="space-y-6">
+                    <h2 class="serif text-3xl text-gray-800 border-b pb-4">${item.t}</h2>
+                    
+                    <div class="space-y-5">
+                        <div class="group">
+                            <span class="tag bg-blue-100 text-blue-700">הגדרה</span>
+                            <p class="mt-2 text-lg text-gray-700 leading-relaxed">${item.d}</p>
+                        </div>
+
+                        ${item.ex ? `
+                        <div class="bg-gray-50 p-4 rounded-xl border-r-4 border-gray-300">
+                            <span class="tag bg-purple-100 text-purple-700">דוגמה</span>
+                            <p class="mt-2 text-gray-600 italic leading-relaxed">${item.ex}</p>
+                        </div>
+                        ` : ''}
+
+                        ${item.k ? `
+                        <div>
+                            <span class="tag bg-emerald-100 text-emerald-700">מילות פתיחה אופייניות</span>
+                            <p class="mt-2 font-mono text-xl text-emerald-800 font-bold tracking-wide" dir="rtl">${item.k}</p>
+                        </div>
+                        ` : ''}
+
+                        ${item.id === 'a6' ? `
+                        <div class="pt-2">
+                            <button onclick="openDerashotPage()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-3 rounded-xl font-bold shadow-sm transition-colors">הרחבה בנושא דרשות הפסוקים</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            document.getElementById('modal-bg').classList.remove('hidden');
+            document.getElementById('modal-bg').classList.add('flex');
+            setTimeout(() => document.getElementById('modal-content').classList.remove('scale-95'), 10);
+        }
+
+        function forceCloseModal() {
+            document.getElementById('modal-content').classList.add('scale-95');
+            document.getElementById('modal-bg').classList.add('hidden');
+            document.getElementById('modal-bg').classList.remove('flex');
+        }
+
+        function openDerashotPage() {
+            forceCloseModal();
+            document.getElementById('map-header').classList.add('hidden');
+            document.getElementById('map-page').classList.add('hidden');
+            document.getElementById('derashot-page').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function backToMap() {
+            document.getElementById('derashot-page').classList.add('hidden');
+            document.getElementById('map-header').classList.remove('hidden');
+            document.getElementById('map-page').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
+        function closeAccordionSection(button) {
+            const details = button.closest('details');
+            if (!details) return;
+            const summary = details.querySelector('summary');
+            details.open = false;
+            if (summary) {
+                summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal-content').classList.add('scale-95');
+            setTimeout(() => {
+                document.getElementById('modal-bg').classList.add('hidden');
+                document.getElementById('modal-bg').classList.remove('flex');
+            }, 200);
+        }
+
+        document.getElementById('modal-bg').onclick = (e) => { if (e.target.id === 'modal-bg') closeModal(); };
+
+        function normalizeText(value) {
+            return String(value || '').trim();
+        }
+
+        function findItemByTitle(title) {
+            const wanted = normalizeText(title);
+            if (!wanted) return null;
+            return [...data.tannaic, ...data.amoraic, ...data.aggada].find(item => normalizeText(item.t) === wanted);
+        }
+
+        function highlightRequestedType() {
+            const params = new URLSearchParams(window.location.search);
+            const requestedType = params.get('type');
+            const item = findItemByTitle(requestedType);
+            if (!item) return;
+            const card = document.getElementById(`card-${item.id}`);
+            if (!card) return;
+            card.classList.add('selected-from-map');
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => openModal(item), 350);
+        }
+
+        window.onload = () => {
+            renderAll();
+            highlightRequestedType();
+        };
+    </script>
+</div>
+</body>
+</html>

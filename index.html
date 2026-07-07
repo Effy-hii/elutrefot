@@ -594,12 +594,46 @@
       padding: 14px;
     }
 
+    .field-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 7px;
+    }
+
     .field-label {
       color: var(--muted);
       font-size: 14px;
       font-weight: 900;
       margin-bottom: 7px;
     }
+
+    .field-head .field-label {
+      margin-bottom: 0;
+    }
+
+    .type-help-btn {
+      border: 0;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .type-help-btn:hover {
+      filter: brightness(.94);
+    }
+
+    .type-help-btn:focus-visible {
+      outline: 3px solid rgba(31, 95, 128, .22);
+      outline-offset: 2px;
+    }
+
 
     .field-value {
       line-height: 1.75;
@@ -959,13 +993,16 @@
         ["נושא ראשי", sugya.topic],
         ["רמת קושי", sugya.difficulty],
         ["מספר שלבים", `${Number(sugya.stages || 0)} שלבים`],
-        ["מטרת הסוגיה (קצר)", sugya.type],
+        ["מטרת הסוגיה (קצר)", sugya.type, "type"],
         ["מטרת הסוגיה (הרחבה)", sugya.preview],
         ["למה הסוגיה נמצאת כאן", sugya.why || "לא הוזן הסבר בקובץ הנתונים."]
       ];
-      els.identityGrid.innerHTML = fields.map(([label, value]) => `
+      els.identityGrid.innerHTML = fields.map(([label, value, kind]) => `
         <div class="field-box">
-          <div class="field-label">${escapeHtml(label)}</div>
+          <div class="field-head">
+            <div class="field-label">${escapeHtml(label)}</div>
+            ${kind === "type" ? `<button class="type-help-btn" type="button" id="openSugyaTypes">מהם הסוגים?</button>` : ""}
+          </div>
           <div class="field-value">${escapeHtml(value || "לא הוזן")}</div>
         </div>
       `).join("");
@@ -1173,6 +1210,10 @@
     document.addEventListener("click", event => {
       const filterHelp = event.target.closest("[data-filter-help]");
       if (filterHelp) openFilterHelp(filterHelp.dataset.filterHelp);
+
+      if (event.target.id === "openSugyaTypes") {
+        window.open("issueComponents.html", "_blank");
+      }
     });
 
     els.topicMap.addEventListener("click", event => {
