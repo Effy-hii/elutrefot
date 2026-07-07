@@ -137,6 +137,29 @@
       font-weight: 900;
     }
 
+    .filter-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .help-mini {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fffaf0;
+      color: var(--blue);
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .help-mini:hover {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+
     .filter-field.search-row {
       margin-bottom: 14px;
     }
@@ -536,6 +559,13 @@
       line-height: 1.1;
     }
 
+    .filter-help-text {
+      white-space: pre-line;
+      color: var(--ink);
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
     .x {
       width: 42px;
       height: 42px;
@@ -664,15 +694,24 @@
 
       <div class="filter-grid">
         <div class="filter-field">
-          <label for="topicFilter">נושא ראשי</label>
+          <div class="filter-label-row">
+            <label for="topicFilter">נושא ראשי</label>
+            <button class="help-mini" type="button" data-filter-help="topic">הסבר</button>
+          </div>
           <select id="topicFilter"></select>
         </div>
         <div class="filter-field">
-          <label for="difficultyFilter">רמת קושי</label>
+          <div class="filter-label-row">
+            <label for="difficultyFilter">רמת קושי</label>
+            <button class="help-mini" type="button" data-filter-help="difficulty">הסבר</button>
+          </div>
           <select id="difficultyFilter"></select>
         </div>
         <div class="filter-field">
-          <label for="stagesFilter">מספר שלבים</label>
+          <div class="filter-label-row">
+            <label for="stagesFilter">מספר שלבים</label>
+            <button class="help-mini" type="button" data-filter-help="stages">הסבר</button>
+          </div>
           <select id="stagesFilter">
             <option value="">כל המספרים</option>
             <option value="1-2">1-2 שלבים</option>
@@ -683,7 +722,10 @@
           </select>
         </div>
         <div class="filter-field">
-          <label for="connectionFilter">קשר לנושא הראשי</label>
+          <div class="filter-label-row">
+            <label for="connectionFilter">קשר לנושא הראשי</label>
+            <button class="help-mini" type="button" data-filter-help="connection">הסבר</button>
+          </div>
           <select id="connectionFilter">
             <option value="">כל האפשרויות</option>
             <option value="direct">הסוגיא קשורה לנושא הפרק</option>
@@ -744,6 +786,18 @@
     </div>
   </div>
 
+  <div class="modal-wrap" id="filterHelpModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <h2 id="filterHelpTitle">הסבר</h2>
+          <p class="filter-help-text" id="filterHelpText"></p>
+        </div>
+        <button class="x" id="closeFilterHelp" type="button" aria-label="סגירה">×</button>
+      </div>
+    </div>
+  </div>
+
   <script src="elu-trifot-map-data.js"></script>
   <script>
     const state = {
@@ -786,7 +840,18 @@
       identityGrid: document.getElementById("identityGrid"),
       identityFullTextBlock: document.getElementById("identityFullTextBlock"),
       identityFullTextSteps: document.getElementById("identityFullTextSteps"),
-      closeModal: document.getElementById("closeModal")
+      closeModal: document.getElementById("closeModal"),
+      filterHelpModal: document.getElementById("filterHelpModal"),
+      filterHelpTitle: document.getElementById("filterHelpTitle"),
+      filterHelpText: document.getElementById("filterHelpText"),
+      closeFilterHelp: document.getElementById("closeFilterHelp")
+    };
+
+    const filterHelpContent = {
+      topic: ["חלוקת הפרק לנושאים", "חז\"ל ערכו את התלמוד בצורה ייחודית. לקט הנושאים שיש בתוכו אינו דומה לתוכן שיש בספרי חוקים אחרים. הרמב\"ם לדוגמא הקפיד למיין את ההלכות בצורה מאוד מסודרת ולשבץ כל הלכה בספר ובהלכות המתאימים לה.\n\nאצל חז\"ל לא קיימים מסכת או פרק שעוסקים רק בנושא אחד, תמיד יש נושאים נוספים שמוזכרים שם. לכן, על מנת להקל על הלומד ולהדגיש בפניו מהם הנושאים הראשיים שמהם מורכב הפרק יצרנו את הסינון הזה. רוב הסוגיות נוגעות בנושא הראשי מזוויות שונות, וכל כמה סוגיות הנושא הראשי מתחלף."],
+      difficulty: ["כיצד נקבעת רמת הקושי של הסוגיה?", "סוגיות בגמרא יכולות להיות ברמות קושי שונות. הקשיים יכולים לנבוע מכמה סיבות.\n\nא. סוגיה בעלת מספר שלבים גדול (לדוגמא סוגיית עביד איניש דינא לנפשיה בבבא קמא כז, ב - 37 שלבים)\nב. סוגיה בעלת חישובים מתמטיים מורכבים (לדוגמא סוגיית של חישובי מולד הירח במסכת ראש השנה או חישובי מידות בהלכה)\nג. סוגיה שבה ההוכחות והראיות קשות להבנה (לדוגמא לימודים מפסוקים בצורות מיוחדות או הוכחות על דרך השלילה)\nד. סוגיה שבה הגמרא משנה את השיטות מהקצה אל הקצה (לדוגמא סוגיית מפקיר נזקיו בבבא קמא כט, ב, שבה הגמרא הופכת כמה פעמים את השיטות)\n\nסוגיות אחרות הן בינוניות, וסוגיות קלות להבנה לגמרי או קצרות מאוד נחשבות לקלות. כשהלומד מקבל את המידע לפני תחילת הלימוד, הוא יכול להתכונן לסוגיה ולהשקיע בה את המאמץ הנדרש."],
+      stages: ["חלוקת הסוגיה לשלבים", "הלומד המתחיל ניגש ללמוד סוגיה והיא מופיעה בעיניו כיחידה אחת ארוכה ומרתיעה. אולם ככל שהוא צובר ניסיון, הוא יודע שניתן לחלק את הסוגיה ליחידות משנה קטנות יותר, לפי מאפיינים קבועים שנקבעו בעריכת הגמרא. כך לדוגמא בכל פעם שמתחלף הדובר - מתחלף השלב. כמו כן, כאשר הגמרא מביאה ראיה - מתחלף השלב, הראיה נדחית - מתחלף השלב וכן על זה הדרך.\n\nבכל סוגיה בקובץ הניווט קיים למטה כפתור שמציג את הסוגיה מחולקת לשלבים, ובכל מקל על הלומד להבין כל יחידה בפני עצמה.\n\nלאחר לימוד של כל יחידה לעצמה, הלומד צריך לסכם לעצמו מהי האמירה של הסוגיה בכל השלבים שלה."],
+      connection: ["קשר הסוגיה לנושא הפרק", "באופן עקרוני רוב הסוגיות קשורות לנושא הפרק, וסובבות סביב פירוש דברי התנאים במשנה. לעיתים הגמרא פותחת דיונים קצרים (או ארוכים) בנושאים משיקים לנושא המשניות באותו פרק או באותה מסכת.\n\nלעיתים ההרחבות האלו יכולות להיות הלכתיות ולעיתים באגדה. כך לדוגמא בסוף הפרק הראשון של מסכת בבא בתרא (יג, ב) יש דיון הלכתי ארוך בנושא כתבי הקודש והלכותיהם אגב הקביעה שאסור לחלק את כתבי הקודש., ובפרק הניזקין במסכת גיטין (נה, ב) יש דיון ארוך על אגדות החורבן אגב אזכור לקיחת שדה מסיקריקון.\n\nכאן המקום להזכיר את דבריו של ר' צדוק הכהן מלובלין (ישראל קדושים, הר ברכה תש\"ס, עמ' 54) שיש סיבות עמוקות לשיבוץ הנושאים האלו דווקא במסכת הזו: \"וקיבלתי, דכל המאמרים בגמרא, אף על פי שכפי הפשט נראה דנמשכו אגב גררא, מכל מקום על האמת יש להם שייכות גמור להמקום שנקבעו שם ושם הוא מקומם הראוי\".\n\nעל מנת לסייע ללומד לזהות ביתר קלות איזה סוגיות שייכות לתוכן המרכזי של הפרק ואיזה נוגעות בנושאים נוספים, יצרנו את אפשרות הסינון הזו."]
     };
 
     function escapeHtml(value) {
@@ -910,6 +975,17 @@
 
     function closeIdentity() {
       els.identityModal.classList.remove("active");
+    }
+
+    function openFilterHelp(kind) {
+      const [title, text] = filterHelpContent[kind] || ["הסבר", ""];
+      els.filterHelpTitle.textContent = title;
+      els.filterHelpText.textContent = text;
+      els.filterHelpModal.classList.add("active");
+    }
+
+    function closeFilterHelp() {
+      els.filterHelpModal.classList.remove("active");
     }
 
     function filteredSugyot() {
@@ -1094,6 +1170,11 @@
     els.mapViewBtn.addEventListener("click", () => setViewMode("map"));
     els.tableViewBtn.addEventListener("click", () => setViewMode("table"));
 
+    document.addEventListener("click", event => {
+      const filterHelp = event.target.closest("[data-filter-help]");
+      if (filterHelp) openFilterHelp(filterHelp.dataset.filterHelp);
+    });
+
     els.topicMap.addEventListener("click", event => {
       const topicButton = event.target.closest("[data-topic]");
       if (!topicButton) return;
@@ -1117,9 +1198,16 @@
     els.identityModal.addEventListener("click", event => {
       if (event.target === els.identityModal) closeIdentity();
     });
+    els.closeFilterHelp.addEventListener("click", closeFilterHelp);
+    els.filterHelpModal.addEventListener("click", event => {
+      if (event.target === els.filterHelpModal) closeFilterHelp();
+    });
 
     document.addEventListener("keydown", event => {
-      if (event.key === "Escape") closeIdentity();
+      if (event.key === "Escape") {
+        closeIdentity();
+        closeFilterHelp();
+      }
     });
 
     loadData();
