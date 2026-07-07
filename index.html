@@ -24,7 +24,9 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--paper);
+      background:
+        linear-gradient(180deg, rgba(246, 239, 226, .72), rgba(246, 239, 226, .92) 34%, rgba(246, 239, 226, .98)),
+        url("assets/sea-path-hero.png") center top / cover fixed;
       color: var(--ink);
       font-family: "Noto Serif Hebrew", "Times New Roman", serif;
     }
@@ -45,6 +47,7 @@
       text-align: center;
       gap: 20px;
       margin-bottom: 22px;
+      padding-top: 10px;
     }
 
     h1 {
@@ -52,6 +55,7 @@
       font-size: clamp(42px, 6vw, 82px);
       line-height: 1;
       letter-spacing: 0;
+      text-shadow: 0 2px 22px rgba(255, 253, 248, .86);
     }
 
     .subtitle {
@@ -59,6 +63,7 @@
       color: var(--muted);
       font-size: 18px;
       line-height: 1.6;
+      text-shadow: 0 1px 16px rgba(255, 253, 248, .9);
     }
 
     .subtitle strong {
