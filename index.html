@@ -42,6 +42,8 @@
     }
 
     .top {
+      position: relative;
+      isolation: isolate;
       display: grid;
       justify-items: center;
       text-align: center;
@@ -52,20 +54,30 @@
       align-content: center;
     }
 
+    .top::before {
+      content: "";
+      position: absolute;
+      inset: 22px max(8%, 34px);
+      z-index: -1;
+      background: radial-gradient(ellipse at center, rgba(255, 253, 248, .62), rgba(255, 253, 248, .38) 42%, rgba(255, 253, 248, 0) 72%);
+      pointer-events: none;
+    }
+
     h1 {
       margin: 0;
       font-size: clamp(42px, 6vw, 82px);
       line-height: 1;
       letter-spacing: 0;
-      text-shadow: 0 2px 22px rgba(255, 253, 248, .86);
+      text-shadow: 0 2px 6px rgba(255, 253, 248, .92), 0 10px 28px rgba(255, 253, 248, .78);
     }
 
     .subtitle {
       margin: 10px 0 0;
-      color: var(--muted);
+      color: #423427;
       font-size: 18px;
       line-height: 1.6;
-      text-shadow: 0 1px 16px rgba(255, 253, 248, .9);
+      font-weight: 700;
+      text-shadow: 0 1px 5px rgba(255, 253, 248, .95), 0 8px 22px rgba(255, 253, 248, .82);
     }
 
     .subtitle strong {
