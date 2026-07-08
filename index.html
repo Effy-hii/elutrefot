@@ -678,6 +678,39 @@
       font-size: 13px;
     }
 
+
+    .guide-launch {
+      position: fixed;
+      left: 22px;
+      bottom: 22px;
+      z-index: 35;
+      min-height: 48px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 18px 44px rgba(20, 45, 58, .28);
+      padding: 10px 18px;
+      cursor: pointer;
+      font-weight: 900;
+    }
+    .guide-launch:hover { filter: brightness(.95); }
+    .guide-layer { position: fixed; inset: 0; z-index: 120; display: none; pointer-events: none; }
+    .guide-layer.active { display: block; }
+    .guide-shade { position: absolute; inset: 0; background: rgba(20, 14, 8, .66); backdrop-filter: blur(2px); pointer-events: auto; }
+    .guide-layer.has-target .guide-shade { background: transparent; backdrop-filter: none; }
+    .guide-highlight { position: absolute; border: 3px solid var(--gold); border-radius: 18px; box-shadow: 0 0 0 9999px rgba(20, 14, 8, .58), 0 0 0 8px rgba(210, 169, 74, .18), 0 18px 56px rgba(0, 0, 0, .28); transition: inset .2s ease, width .2s ease, height .2s ease, border-radius .2s ease; pointer-events: none; }
+    .guide-card { position: absolute; width: min(430px, calc(100vw - 32px)); border: 1px solid rgba(223, 208, 184, .9); border-radius: 18px; background: rgba(255, 253, 248, .98); box-shadow: 0 28px 86px rgba(19, 12, 6, .34); padding: 18px; pointer-events: auto; }
+    .guide-card.center { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .guide-progress { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--muted); font-size: 13px; font-weight: 900; margin-bottom: 10px; }
+    .guide-card h2 { margin: 0 0 10px; font-size: 28px; line-height: 1.15; }
+    .guide-card p { margin: 0; color: #46392c; font-size: 17px; line-height: 1.75; white-space: pre-line; }
+    .guide-actions { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .guide-actions button { min-height: 40px; border: 1px solid var(--line); border-radius: 999px; background: #fffaf0; color: var(--ink); padding: 7px 14px; cursor: pointer; font-weight: 900; }
+    .guide-actions .primary { border-color: var(--blue); background: var(--blue); color: #fff; }
+    .guide-actions .muted { color: var(--muted); }
+    .guide-actions button:disabled { opacity: .42; cursor: not-allowed; }
+    .types-frame { width: 100%; min-height: min(70vh, 760px); border: 1px solid var(--line); border-radius: 14px; background: #fff; }
     @media (max-width: 980px) {
       .top {
         display: grid;
@@ -713,20 +746,20 @@
           <span>הדגמה על פרק אלו טרפות</span>
         </p>
       </div>
-      <div class="stats">
+      <div class="stats" data-guide="stats">
         <span class="pill" id="sugyaCount">0 סוגיות</span>
         <span class="pill" id="topicCount">0 תתי־נושאים</span>
       </div>
     </header>
 
-    <section class="panel filter-panel">
-      <div class="filter-field search-row">
+    <section class="panel filter-panel" data-guide="filter-panel">
+      <div class="filter-field search-row" data-guide="search">
         <label for="searchInput">חיפוש לפי טקסט</label>
         <input class="search" id="searchInput" type="search" placeholder="מילים מתוך הסוגיה או הכותרות">
         <div class="small">החיפוש בודק את הטקסט המלא של הסוגיה, וגם שדות מרכזיים נוספים. אם הקטע קיים בקובץ, הסוגיה תופיע בתוצאות.</div>
       </div>
 
-      <div class="filter-grid">
+      <div class="filter-grid" data-guide="filters">
         <div class="filter-field">
           <div class="filter-label-row">
             <label for="topicFilter">נושא ראשי</label>
@@ -770,24 +803,24 @@
 
       <div class="filter-toolbar">
         <strong id="filterResultCount">0 סוגיות</strong>
-        <div class="view-choice">
+        <div class="view-choice" data-guide="view-switch">
           <span>בחר תצוגה</span>
           <div class="view-toggle" aria-label="בחירת תצוגה">
             <button class="active" id="mapViewBtn" type="button" data-view-mode="map">עיגולים</button>
             <button id="tableViewBtn" type="button" data-view-mode="table">טבלה</button>
           </div>
         </div>
-        <button class="ghost-action" id="clearFilters" type="button">איפוס סינון</button>
+        <button class="ghost-action" id="clearFilters" type="button" data-guide="clear-filters">איפוס סינון</button>
       </div>
     </section>
 
     <section class="layout" id="mainLayout">
       <div class="panel">
-        <div class="view-pane" id="mapView">
+        <div class="view-pane" id="mapView" data-guide="topics">
           <h2 class="panel-title">נושאים ראשיים</h2>
           <div class="topic-map" id="topicMap"></div>
         </div>
-        <div class="view-pane" id="tableView" hidden></div>
+        <div class="view-pane" id="tableView" data-guide="table-view" hidden></div>
       </div>
       <aside class="panel side-panel" id="sidePanel">
         <div class="side-head">
@@ -797,13 +830,41 @@
             <span class="small" id="selectedCount"></span>
           </div>
         </div>
-        <div class="sugya-list" id="sugyaList"></div>
+        <div class="sugya-list" id="sugyaList" data-guide="sugya-list"></div>
       </aside>
     </section>
   </main>
 
-  <div class="modal-wrap" id="identityModal">
+  <button class="guide-launch" id="openUserGuide" type="button">מדריך למשתמש</button>
+
+  <div class="guide-layer" id="userGuideLayer" aria-hidden="true">
+    <div class="guide-shade" id="guideShade"></div>
+    <div class="guide-highlight" id="guideHighlight"></div>
+    <section class="guide-card" id="guideCard" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+      <div class="guide-progress"><span id="guideStepCount"></span><button class="muted" id="guideClose" type="button">דלג</button></div>
+      <h2 id="guideTitle"></h2>
+      <p id="guideText"></p>
+      <div class="guide-actions">
+        <button id="guidePrev" type="button">הקודם</button>
+        <button class="primary" id="guideNext" type="button">התחל סיור</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-wrap" id="typesGuideModal">
     <div class="modal">
+      <div class="modal-head">
+        <div>
+          <h2>מהם סוגי הסוגיות?</h2>
+          <p class="small">חלון זה מציג את מדריך מרכיבי הסוגיה בלי לצאת מן המפה.</p>
+        </div>
+        <button class="x" id="closeTypesGuide" type="button" aria-label="סגירה">×</button>
+      </div>
+      <iframe class="types-frame" src="issueComponents.html" title="מפתח מרכיבי הסוגיה"></iframe>
+    </div>
+  </div>
+  <div class="modal-wrap" id="identityModal">
+    <div class="modal" data-guide="identity-modal-card">
       <div class="modal-head">
         <div>
           <h2 id="modalTitle">תעודת זהות</h2>
@@ -812,7 +873,7 @@
         <button class="x" id="closeModal" type="button" aria-label="סגירה">×</button>
       </div>
       <div class="identity-grid" id="identityGrid"></div>
-      <div class="full-text-block" id="identityFullTextBlock" hidden>
+      <div class="full-text-block" id="identityFullTextBlock" data-guide="full-text" hidden>
         <div class="field-label">טקסט מלא מחולק לפי שלבים</div>
         <p class="small">החלוקה הזו מאפשרת לראות את רצף הסוגיה ולזהות איפה מילים מתוך החיפוש מופיעות.</p>
         <div class="stage-text-list" id="identityFullTextSteps"></div>
@@ -833,6 +894,7 @@
   </div>
 
   <script src="elu-trifot-map-data.js"></script>
+  <script src="user-guide-data.js"></script>
   <script>
     const state = {
       data: null,
@@ -878,7 +940,20 @@
       filterHelpModal: document.getElementById("filterHelpModal"),
       filterHelpTitle: document.getElementById("filterHelpTitle"),
       filterHelpText: document.getElementById("filterHelpText"),
-      closeFilterHelp: document.getElementById("closeFilterHelp")
+      closeFilterHelp: document.getElementById("closeFilterHelp"),
+      openUserGuide: document.getElementById("openUserGuide"),
+      userGuideLayer: document.getElementById("userGuideLayer"),
+      guideShade: document.getElementById("guideShade"),
+      guideHighlight: document.getElementById("guideHighlight"),
+      guideCard: document.getElementById("guideCard"),
+      guideStepCount: document.getElementById("guideStepCount"),
+      guideTitle: document.getElementById("guideTitle"),
+      guideText: document.getElementById("guideText"),
+      guidePrev: document.getElementById("guidePrev"),
+      guideNext: document.getElementById("guideNext"),
+      guideClose: document.getElementById("guideClose"),
+      typesGuideModal: document.getElementById("typesGuideModal"),
+      closeTypesGuide: document.getElementById("closeTypesGuide")
     };
 
     const filterHelpContent = {
@@ -1024,6 +1099,261 @@
     function closeFilterHelp() {
       els.filterHelpModal.classList.remove("active");
     }
+    const guideConfig = window.ELU_TRIFOT_USER_GUIDE || { steps: [] };
+    const guideState = { active: false, index: 0, started: false, resizeHandler: null };
+
+    function openTypesPanel() {
+      els.typesGuideModal.classList.add("active");
+    }
+
+    function closeTypesPanel() {
+      els.typesGuideModal.classList.remove("active");
+    }
+
+    function clearAllFilters() {
+      state.filters.search = "";
+      state.filters.topic = "";
+      state.filters.difficulty = "";
+      state.filters.stages = "";
+      state.filters.connection = "";
+      els.searchInput.value = "";
+      els.topicFilter.value = "";
+      els.difficultyFilter.value = "";
+      els.stagesFilter.value = "";
+      els.connectionFilter.value = "";
+      render();
+    }
+
+    function findSampleSugya() {
+      const title = guideConfig.sampleSugyaTitle || "מניין שטרפה אינה חיה";
+      return (state.data?.sugyot || []).find(s => s.title === title) ||
+        (state.data?.sugyot || []).find(s => normalize(s.title).includes(normalize(title))) ||
+        (state.data?.sugyot || [])[0];
+    }
+
+    function applyGuideAction(action) {
+      if (!action) return;
+      if (action === "reset") {
+        closeIdentity(); closeFilterHelp(); closeTypesPanel(); clearAllFilters(); setViewMode("map");
+      }
+      if (action === "demoSearch") {
+        closeIdentity(); closeTypesPanel(); setViewMode("map");
+        els.searchInput.value = guideConfig.searchDemo || "מאיר";
+        updateFilters();
+      }
+      if (action === "showSearchResults") {
+        closeIdentity(); closeFilterHelp(); closeTypesPanel();
+        setViewMode("map");
+        els.searchInput.value = guideConfig.searchDemo || "מאיר";
+        updateFilters();
+      }
+      if (action === "resetAfterSearch") {
+        closeIdentity(); closeFilterHelp(); closeTypesPanel();
+        clearAllFilters();
+        setViewMode("map");
+      }
+      if (action === "demoDifficulty") {
+        closeIdentity(); closeFilterHelp(); closeTypesPanel();
+        state.filters.search = "";
+        els.searchInput.value = "";
+        setViewMode("map");
+        els.difficultyFilter.value = "בינוני";
+        updateFilters();
+      }
+      if (action === "showFilteredDifficulty") {
+        closeIdentity(); closeFilterHelp(); closeTypesPanel();
+        state.filters.search = "";
+        els.searchInput.value = "";
+        setViewMode("map");
+        els.difficultyFilter.value = "בינוני";
+        updateFilters();
+      }
+      if (action === "showMap") {
+        closeIdentity(); closeFilterHelp(); closeTypesPanel(); clearAllFilters(); setViewMode("map");
+      }
+      if (action === "focusSampleSugya") {
+        closeIdentity(); closeFilterHelp(); closeTypesPanel();
+        clearAllFilters();
+        const sugya = findSampleSugya();
+        if (sugya) {
+          state.selectedTopic = sugya.topic;
+          setViewMode("map");
+          renderSelectedTopic();
+          requestAnimationFrame(() => {
+            const card = document.querySelector("[data-guide='sample-sugya-card']");
+            if (card) card.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+          });
+        } else {
+          setViewMode("map");
+        }
+      }
+      if (action === "openSampleSugya") {
+        const sugya = findSampleSugya();
+        if (sugya && !els.identityModal.classList.contains("active")) openIdentity(sugya);
+      }
+      if (action === "focusTypesButton") {
+        const sugya = findSampleSugya();
+        if (sugya && !els.identityModal.classList.contains("active")) openIdentity(sugya);
+        closeTypesPanel();
+      }
+      if (action === "openTypesPanel") {
+        const sugya = findSampleSugya();
+        if (sugya && !els.identityModal.classList.contains("active")) openIdentity(sugya);
+        openTypesPanel();
+      }
+      if (action === "closeTypesPanel") {
+        closeTypesPanel();
+        const sugya = findSampleSugya();
+        if (sugya && !els.identityModal.classList.contains("active")) openIdentity(sugya);
+      }
+      if (action === "showTable") {
+        closeIdentity(); closeTypesPanel(); setViewMode("table");
+        requestAnimationFrame(() => {
+          const tablePreview = document.querySelector("[data-guide='table-preview']");
+          if (tablePreview) {
+            tablePreview.scrollTop = 0;
+            tablePreview.scrollLeft = 0;
+          }
+        });
+      }
+      if (action === "prepareReset") {
+        closeIdentity(); closeFilterHelp(); closeTypesPanel();
+        clearAllFilters();
+        setViewMode("table");
+        requestAnimationFrame(() => {
+          const tablePreview = document.querySelector("[data-guide='table-preview']");
+          if (tablePreview) {
+            tablePreview.scrollTop = 0;
+            tablePreview.scrollLeft = 0;
+          }
+        });
+      }
+    }
+
+    function guideTarget(step) {
+      if (!step || step.placement === "center") return null;
+      return document.querySelector(step.target);
+    }
+
+    function combinedRect(elements) {
+      const parts = elements.filter(Boolean).map(el => el.getBoundingClientRect());
+      if (!parts.length) return null;
+      const top = Math.min(...parts.map(rect => rect.top));
+      const left = Math.min(...parts.map(rect => rect.left));
+      const right = Math.max(...parts.map(rect => rect.right));
+      const bottom = Math.max(...parts.map(rect => rect.bottom));
+      return { top, left, right, bottom, width: right - left, height: bottom - top };
+    }
+
+    function guideTargetRect(step, target) {
+      if (step && step.target === "[data-guide='table-preview']") {
+        target.scrollTop = 0;
+        target.scrollLeft = 0;
+        const tableRect = combinedRect([
+          ...target.querySelectorAll("thead"),
+          ...Array.from(target.querySelectorAll("tbody tr")).slice(0, 10)
+        ]);
+        if (tableRect) return tableRect;
+      }
+      if (step && step.target === "[data-guide='sugya-list']") {
+        const listRect = combinedRect(Array.from(target.querySelectorAll(".sugya")).slice(0, 3));
+        if (listRect) return listRect;
+      }
+      return target.getBoundingClientRect();
+    }
+
+    function positionGuide(step) {
+      const target = guideTarget(step);
+      els.guideCard.classList.toggle("center", !target);
+      els.userGuideLayer.classList.toggle("has-target", !!target);
+      if (!target) {
+        els.guideHighlight.style.display = "none";
+        return;
+      }
+      target.scrollIntoView({ behavior: "smooth", block: (step && (step.target === "[data-guide='sugya-list']" || step.target === "[data-guide='table-preview']")) ? "start" : "center", inline: "center" });
+      requestAnimationFrame(() => {
+        const rect = guideTargetRect(step, target);
+        const pad = 8;
+        const top = Math.max(10, rect.top - pad);
+        const left = Math.max(10, rect.left - pad);
+        const width = Math.min(window.innerWidth - left - 10, rect.width + pad * 2);
+        const height = Math.min(window.innerHeight - top - 10, rect.height + pad * 2);
+        els.guideHighlight.style.display = "block";
+        els.guideHighlight.style.top = `${top}px`;
+        els.guideHighlight.style.left = `${left}px`;
+        els.guideHighlight.style.width = `${width}px`;
+        els.guideHighlight.style.height = `${height}px`;
+        els.guideHighlight.style.borderRadius = rect.height < 70 ? "999px" : "18px";
+        const cardWidth = Math.min(430, window.innerWidth - 32);
+        const cardHeight = els.guideCard.offsetHeight || 260;
+        let cardLeft = left;
+        let cardTop = top + height + 16;
+        if (cardTop + cardHeight > window.innerHeight - 16) cardTop = top - cardHeight - 16;
+        if (cardTop < 16) cardTop = 16;
+        if (cardLeft + cardWidth > window.innerWidth - 16) cardLeft = window.innerWidth - cardWidth - 16;
+        els.guideCard.style.left = `${Math.max(16, cardLeft)}px`;
+        els.guideCard.style.top = `${cardTop}px`;
+        els.guideCard.style.transform = "none";
+      });
+    }
+
+    function renderGuideStep() {
+      const steps = guideConfig.steps || [];
+      const step = steps[guideState.index];
+      if (!step) return;
+      applyGuideAction(step.action);
+      els.userGuideLayer.classList.add("active");
+      els.userGuideLayer.setAttribute("aria-hidden", "false");
+      els.guideTitle.textContent = step.title;
+      els.guideText.textContent = step.text;
+      els.guideStepCount.textContent = `שלב ${guideState.index + 1} מתוך ${steps.length}`;
+      els.guidePrev.disabled = guideState.index === 0;
+      els.guideNext.textContent = guideState.index === 0 && !guideState.started ? "התחל סיור" : (guideState.index === steps.length - 1 ? "סיום" : "הבא");
+      setTimeout(() => positionGuide(step), 140);
+    }
+
+    function openUserGuide(startIndex = 0) {
+      guideState.active = true;
+      guideState.index = startIndex;
+      guideState.started = startIndex > 0;
+      if (!guideState.resizeHandler) {
+        guideState.resizeHandler = () => {
+          if (guideState.active) positionGuide((guideConfig.steps || [])[guideState.index]);
+        };
+        window.addEventListener("resize", guideState.resizeHandler);
+        window.addEventListener("scroll", guideState.resizeHandler, true);
+      }
+      renderGuideStep();
+    }
+
+    function closeUserGuide() {
+      guideState.active = false;
+      closeTypesPanel();
+      els.userGuideLayer.classList.remove("active");
+      els.userGuideLayer.setAttribute("aria-hidden", "true");
+    }
+
+    function nextGuideStep() {
+      const steps = guideConfig.steps || [];
+      if (guideState.index === 0 && !guideState.started) {
+        guideState.started = true;
+        guideState.index = 1;
+        renderGuideStep();
+        return;
+      }
+      if (guideState.index >= steps.length - 1) {
+        closeUserGuide();
+        return;
+      }
+      guideState.index += 1;
+      renderGuideStep();
+    }
+
+    function prevGuideStep() {
+      if (guideState.index <= 0) return;
+      guideState.index -= 1;
+      renderGuideStep();
+    }
 
     function filteredSugyot() {
       const q = normalize(state.filters.search);
@@ -1098,7 +1428,7 @@
 
     function renderSugyaCards(sugyot) {
       return sugyot.map(s => `
-        <button class="sugya" type="button" data-sugya-id="${escapeHtml(s.id)}">
+        <button class="sugya" type="button" data-sugya-id="${escapeHtml(s.id)}" ${s.title === guideConfig.sampleSugyaTitle ? 'data-guide="sample-sugya-card"' : ""}>
           <span class="sugya-title">${s.order}. ${escapeHtml(s.title)}</span>
           <div class="small">${escapeHtml(s.scope)}</div>
           <p class="small">${escapeHtml(s.preview || "")}</p>
@@ -1114,7 +1444,7 @@
 
     function renderSugyaTable(sugyot) {
       return `
-        <div class="table-wrap">
+        <div class="table-wrap" data-guide="table-preview">
           <table class="sugya-table">
             <thead>
               <tr>
@@ -1206,13 +1536,22 @@
 
     els.mapViewBtn.addEventListener("click", () => setViewMode("map"));
     els.tableViewBtn.addEventListener("click", () => setViewMode("table"));
+    els.openUserGuide.addEventListener("click", () => openUserGuide(0));
+    els.guideNext.addEventListener("click", nextGuideStep);
+    els.guidePrev.addEventListener("click", prevGuideStep);
+    els.guideClose.addEventListener("click", closeUserGuide);
+    els.guideShade.addEventListener("click", closeUserGuide);
+    els.closeTypesGuide.addEventListener("click", closeTypesPanel);
+    els.typesGuideModal.addEventListener("click", event => {
+      if (event.target === els.typesGuideModal) closeTypesPanel();
+    });
 
     document.addEventListener("click", event => {
       const filterHelp = event.target.closest("[data-filter-help]");
       if (filterHelp) openFilterHelp(filterHelp.dataset.filterHelp);
 
       if (event.target.id === "openSugyaTypes") {
-        window.open("issueComponents.html", "_blank");
+        openTypesPanel();
       }
     });
 
@@ -1248,10 +1587,12 @@
       if (event.key === "Escape") {
         closeIdentity();
         closeFilterHelp();
+        closeTypesPanel();
+        if (guideState.active) closeUserGuide();
       }
     });
 
-    loadData();
+    loadData().then(() => setTimeout(() => openUserGuide(0), 500));
   </script>
 </body>
 </html>
